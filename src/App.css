@@ -5,12 +5,13 @@ margin-left: 20px;
 .section-design{
   position: relative;
   top: 0;
-  left: 160px;
+  left: 0px;
   margin-bottom: 10px;
 }
 .btn-design{
-  width: 70px;
-  height: 25px;
+  display: inline-block;
+  width: 90px;
+  height: 30px;
   font-weight:500;
   border: 2px solid rgb(176, 129, 214);
   border-radius: 20px;
