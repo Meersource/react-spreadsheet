@@ -9,10 +9,8 @@ export default function App() {
     [{ value: 45 }, { value: 90 }, { value: 0.33 }],
     [{ value: 78 }, { value: 0.13 }, { value: 54 }],
   ]); // State for Data of the Spreadsheet
-  // const [selectedCellPoint, setSelectedCellPoint] = useState({}); // State for Selected Cell Points
   const [MSCP, setMSCP] = useState([]);
 
-  // const [singleCopy, setSingleCopy] = useState();
   const [sLineCopy, setSLineCopy] = useState([]);
 
   const onSelectCall = (fData) => {
@@ -28,27 +26,7 @@ export default function App() {
         setMSCP(newArr);
       }
     }
-    // else {
-    //   const points = {
-    //     // Destructuring data into positon for position points
-    //     row: fData.row,
-    //     column: fData.column,
-    //   };
-    //   setSelectedCellPoint(points); //Called to set Selected Cell Points of the cell
-    // }
   };
-
-  // const copyDataHandler = () => {
-  //   // Called When the Copy button is clicked
-  //   const ourData = data;
-  //   const row = selectedCellPoint.row;
-  //   const column = selectedCellPoint.column;
-  //   const copiedValue = ourData[row][column].value;
-
-  //   setSingleCopy(copiedValue); // set state of copied value to singleCopy
-  //   console.log("copy", ourData[row][column].value);
-
-  // };
 
   const copyMulDataHandler = () => {
     const selecteValues = MSCP.map((i) => data[i.row][i.column].value);
@@ -71,21 +49,14 @@ export default function App() {
         }
       });
   
-      // if(sData.length < sLineCopy.length ){
-      //   sData.push([{ value: "" }, { value: "" }, { value: "" }]);
+      if(sData.length < sLineCopy.length ){
+        sData.push([{ value: "" }, { value: "" }, { value: "" }]);
   
-      // }
+      }
       setData(sData);
     }
   };
 
-  // const pasteDataHandler = () => {
-
-  //   data[selectedCellPoint.row][selectedCellPoint.column].value = singleCopy
-
-  //   onSelectCall(selectedCellPoint); // Called When onSelect of spreadsheet triggers
-  //   setData(data);
-  // };
   const cutDataHandler = () => {
     copyMulDataHandler();
     let sData = [...data];
@@ -95,19 +66,11 @@ export default function App() {
     setData(sData);
   };
 
-  // const cutDataHandler = () => {
-  //   copyDataHandler();
-  //   data[selectedCellPoint.row][selectedCellPoint.column].value = "";
-  //   onSelectCall(selectedCellPoint);
-  //   setData(data);
-  // };
   const addRowHandler = () => {
     let nData = [...data];
-    nData.push([{ value: "" }, { value: "" }, { value: "" }]);
-    // for (var i = 0; i < nData.length; i++) {
-    //   nData[i].push({ value: 1 });
-    //   // nData.concat(newData);s
-    // }
+
+    nData.splice(MSCP[0].row+1, 0 , [{ value: "" }, { value: "" }, { value: "" }])
+   
     setData(nData);
   };
 
