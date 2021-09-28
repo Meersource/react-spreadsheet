@@ -6,12 +6,15 @@ export default function App() {
   const [data, setData] = useState([
     [{ value: 45 }, { value: 13 }, { value: 23 }],
     [{ value: 34 }, { value: 53 }, { value: 55 }],
-    [{ value: 45 }, { value: 90 }, { value: 0.33 }],
-    [{ value: 78 }, { value: 0.13 }, { value: 54 }],
+    [{ value: 45 }, { value: 90 }, { value: 43 }],
+    [{ value: 78 }, { value: 21 }, { value: 54 }],
   ]); // State for Data of the Spreadsheet
   const [MSCP, setMSCP] = useState([]);
 
   const [sLineCopy, setSLineCopy] = useState([]);
+
+  const [biggestCopiedRow, setBiggestCopiedRow] = useState([]); // My Biggest Copied Row Index
+  const [smallestCopiedRow, setSmallestCopiedRow] = useState([]); // My Biggest Copied Row Index
 
   const onSelectCall = (fData) => {
     console.log(fData);
@@ -30,6 +33,28 @@ export default function App() {
 
   const copyMulDataHandler = () => {
     const selecteValues = MSCP.map((i) => data[i.row][i.column].value);
+
+    if(MSCP.length > 1){
+      let count = 0;
+      let smallestRow = MSCP[0].row;
+      let biggestRow = MSCP[0].row;
+
+      for(let i = 0; i<MSCP.length; i++){
+        count = count + 1;
+        if(MSCP[i].row < smallestRow){
+          smallestRow = MSCP[i].row;
+        }
+        if(MSCP[i].row > biggestRow){
+          biggestRow = MSCP[i].row;
+        }
+      }
+      setBiggestCopiedRow(biggestRow);
+      setSmallestCopiedRow(smallestRow);
+
+      console.log("Smallest Selected Row: ", smallestRow,"Biggest Selected Row: ", biggestRow);
+      console.log("Smallest Copied Row: ", smallestCopiedRow,"Biggest Copied Row: ", biggestCopiedRow);
+    }
+
     setSLineCopy(selecteValues);
   };
   const pasteMulDataHandler = () => {
@@ -38,21 +63,35 @@ export default function App() {
       let sData = [...data];
       MSCP.forEach(function (number, index) {
         sData[number.row][number.column].value = sLineCopy[index];
-        console.log("Number: ", number);
-        console.log("Index: ", index);
-        if(MSCP.length < sLineCopy.length ){
-          console.log("sData.length", MSCP.length);
-          console.log("sLineCopy.length", sLineCopy.length);
-          sData.push([{ value: "" }, { value: "" }, { value: "" }]);
-          setData(sData);
-    
-        }
       });
-  
-      if(sData.length < sLineCopy.length ){
-        sData.push([{ value: "" }, { value: "" }, { value: "" }]);
-  
+
+     if(MSCP.length > 1){
+      let count = 0;
+      let smallestRow = MSCP[0].row;
+      let biggestRow = MSCP[0].row;
+
+      for(let i = 0; i<MSCP.length; i++){
+        count = count + 1;
+        if(MSCP[i].row < smallestRow){
+          smallestRow = MSCP[i].row;
+        }
+        if(MSCP[i].row > biggestRow){
+          biggestRow = MSCP[i].row;
+        }
       }
+
+      console.log("Smallest Selected Row: ", smallestRow,"Biggest Selected Row: ", biggestRow);
+      console.log("Smallest Copied Row: ", smallestCopiedRow,"Biggest Copied Row: ", biggestCopiedRow);
+
+      if(biggestRow >= biggestCopiedRow ){
+        let differenceCopiedRow = biggestCopiedRow - smallestCopiedRow;
+        let differenceSelectedRow = biggestRow - smallestRow;
+        console.log("differenceSelectedRow:", differenceSelectedRow);
+        for(let i=0; i<differenceCopiedRow - differenceSelectedRow; i++){
+          sData.push([{ value: "" }, { value: "" }, { value: "" }]);
+        } 
+      }
+    }
       setData(sData);
     }
   };
@@ -68,9 +107,7 @@ export default function App() {
 
   const addRowHandler = () => {
     let nData = [...data];
-
     nData.splice(MSCP[0].row+1, 0 , [{ value: "" }, { value: "" }, { value: "" }])
-   
     setData(nData);
   };
 
