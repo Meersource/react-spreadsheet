@@ -8,10 +8,9 @@ export default function App() {
     [{ value: 34 }, { value: 53 }, { value: 55 }],
     [{ value: 45 }, { value: 90 }, { value: 43 }],
     [{ value: 78 }, { value: 21 }, { value: 54 }],
-  ]); // State for Data of the Spreadsheet
+  ]);
   const [MSCP, setMSCP] = useState([]);
-
-  const [sLineCopy, setSLineCopy] = useState([]);
+  const [Copy, setCopy] = useState([]);
 
   const [biggestCopiedRow, setBiggestCopiedRow] = useState([]); // My Biggest Copied Row Index
   const [smallestCopiedRow, setSmallestCopiedRow] = useState([]); // My Biggest Copied Row Index
@@ -29,76 +28,101 @@ export default function App() {
         setMSCP(newArr);
       }
     }
+    console.log("MSCP:",MSCP);
   };
 
-  const copyMulDataHandler = () => {
+  const copyDataHandler = () => {
     const selecteValues = MSCP.map((i) => data[i.row][i.column].value);
 
-    if(MSCP.length > 1){
+    if (MSCP.length > 1) {
       let count = 0;
       let smallestRow = MSCP[0].row;
       let biggestRow = MSCP[0].row;
 
-      for(let i = 0; i<MSCP.length; i++){
+      for (let i = 0; i < MSCP.length; i++) {
         count = count + 1;
-        if(MSCP[i].row < smallestRow){
+        if (MSCP[i].row < smallestRow) {
           smallestRow = MSCP[i].row;
         }
-        if(MSCP[i].row > biggestRow){
+        if (MSCP[i].row > biggestRow) {
           biggestRow = MSCP[i].row;
         }
       }
       setBiggestCopiedRow(biggestRow);
       setSmallestCopiedRow(smallestRow);
 
-      console.log("Smallest Selected Row: ", smallestRow,"Biggest Selected Row: ", biggestRow);
-      console.log("Smallest Copied Row: ", smallestCopiedRow,"Biggest Copied Row: ", biggestCopiedRow);
+      console.log(
+        "Smallest Selected Row: ",
+        smallestRow,
+        "Biggest Selected Row: ",
+        biggestRow
+      );
+      console.log(
+        "Smallest Copied Row: ",
+        smallestCopiedRow,
+        "Biggest Copied Row: ",
+        biggestCopiedRow
+      );
     }
 
-    setSLineCopy(selecteValues);
+    setCopy(selecteValues);
   };
-  const pasteMulDataHandler = () => {
-    if(sLineCopy.length >= 1) {
-
+  const pasteDataHandler = () => {
+    if (Copy.length >= 1) {
       let sData = [...data];
       MSCP.forEach(function (number, index) {
-        sData[number.row][number.column].value = sLineCopy[index];
+        console.log("Pnumber : ",number + "index",index);
+        sData[number.row][number.column].value = Copy[index];
       });
 
-     if(MSCP.length > 1){
-      let count = 0;
-      let smallestRow = MSCP[0].row;
-      let biggestRow = MSCP[0].row;
+      if (MSCP.length > 1) {
+        let count = 0;
+        let smallestRow = MSCP[0].row;
+        let biggestRow = MSCP[0].row;
 
-      for(let i = 0; i<MSCP.length; i++){
-        count = count + 1;
-        if(MSCP[i].row < smallestRow){
-          smallestRow = MSCP[i].row;
+        for (let i = 0; i < MSCP.length; i++) {
+          count = count + 1;
+          if (MSCP[i].row < smallestRow) {
+            smallestRow = MSCP[i].row;
+          }
+          if (MSCP[i].row > biggestRow) {
+            biggestRow = MSCP[i].row;
+          }
         }
-        if(MSCP[i].row > biggestRow){
-          biggestRow = MSCP[i].row;
+
+        console.log(
+          "Smallest Selected Row: ",
+          smallestRow,
+          "Biggest Selected Row: ",
+          biggestRow
+        );
+        console.log(
+          "Smallest Copied Row: ",
+          smallestCopiedRow,
+          "Biggest Copied Row: ",
+          biggestCopiedRow
+        );
+
+        if (biggestRow >= biggestCopiedRow) {
+          let differenceCopiedRow = biggestCopiedRow - smallestCopiedRow;
+          let differenceSelectedRow = biggestRow - smallestRow;
+          console.log("differenceSelectedRow:", differenceSelectedRow);
+          for (
+            let i = 0;
+            i < differenceCopiedRow - differenceSelectedRow;
+            i++
+          ) {
+            sData.push([{ value: "" }, { value: "" }, { value: "" }]);
+          }
         }
       }
-
-      console.log("Smallest Selected Row: ", smallestRow,"Biggest Selected Row: ", biggestRow);
-      console.log("Smallest Copied Row: ", smallestCopiedRow,"Biggest Copied Row: ", biggestCopiedRow);
-
-      if(biggestRow >= biggestCopiedRow ){
-        let differenceCopiedRow = biggestCopiedRow - smallestCopiedRow;
-        let differenceSelectedRow = biggestRow - smallestRow;
-        console.log("differenceSelectedRow:", differenceSelectedRow);
-        for(let i=0; i<differenceCopiedRow - differenceSelectedRow; i++){
-          sData.push([{ value: "" }, { value: "" }, { value: "" }]);
-        } 
-      }
-    }
       setData(sData);
     }
-    setSLineCopy('')
+    setCopy("");
   };
 
   const cutDataHandler = () => {
-    copyMulDataHandler();
+    copyDataHandler();
     let sData = [...data];
     MSCP.forEach(function (number, index) {
       sData[number.row][number.column].value = "";
@@ -107,14 +131,15 @@ export default function App() {
   };
 
   const addRowHandler = () => {
-    let cell= data.length
-    
-    if(MSCP.length > 0){
-      cell =MSCP[0].row+1
+    let cell = data.length;
+
+    if (MSCP.length > 0) {
+      cell = MSCP[0].row + 1;
     }
     let nData = [...data];
-    nData.splice(cell, 0 , [{ value: "" }, { value: "" }, { value: "" }])
+    nData.splice(cell, 0, [{ value: "" }, { value: "" }, { value: "" }]);
     setData(nData);
+
   };
   // const addRowHandler = () => {
   //   let nData = [...data];
@@ -128,39 +153,65 @@ export default function App() {
 
   const addColHandler = () => {
     let nData = [...data];
+    let position = nData[0].length
+    if(MSCP.length>0){
+      position= MSCP[0].column +1
+     
+    }
     for (var i = 0; i < nData.length; i++) {
-      nData[i].push({ value: "" });
+      nData[i].splice(position,0,{ value: "" });
     }
     setData(nData);
   };
-  const deleteRowHandler = ()=>{
-    let nData=[...data]
+  const deleteRowHandler = () => {
+    let nData = [...data];
     // const selecteValues = MSCP.map((i) => MSCP[i].row);
     // const selecteValues = MSCP[0].row;
-    MSCP.forEach(function(number,index){
-      nData.splice(number.row,1)
+    MSCP.forEach(function (number, index) {
+      nData.splice(number.row, 1);
     });
-    // if(nData.length===0){
-    //   nData.splice(0, 0 , [{ value: "" }, { value: "" }, { value: "" }])
-    // }
+    setData(nData);
+  };
+  const deleColHandler = () =>{
+    let nData = [...data];
+    let position = nData[0].length;
+    if (MSCP.length > 0) {
+      position = MSCP[0].column;
+    }
+    for (var i = 0; i < nData.length; i++) {
+      nData[i].splice(position, 1);
+    }
+    setData(nData);
+  }
+  const readOnlyHandler = () => {
+       
+    let nData = [...data]
 
+    MSCP.forEach(function (number, index) {
+      nData[number.row].splice([number.column], 1, {value: nData[number.row][number.column].value, readOnly : true});
+    });
 
-    // nData.splice(selecteValues,1)
-    // console.log("del", selecteValues);
     setData(nData)
 
+
+  console.log("Selected Values", data);
+}
+  const sortColHandler =() =>{
+    let nData= [...data]
+    for(let i=0; i<data.length; i++) {
+      nData[i].MSCP[0].column.sort()
+    }
   }
 
- 
   return (
     <div className="App">
       <h1>React-SpreadSheet</h1>
 
       <div className="section-design">
-        <button onClick={copyMulDataHandler} className="btn-design">
+        <button onClick={copyDataHandler} className="btn-design">
           Copy
         </button>
-        <button onClick={pasteMulDataHandler} className="btn-design">
+        <button onClick={pasteDataHandler} className="btn-design">
           Paste
         </button>
         <button onClick={cutDataHandler} className="btn-design">
@@ -175,6 +226,17 @@ export default function App() {
         <button onClick={deleteRowHandler} className="btn-design">
           Delete Row
         </button>
+        <button onClick={deleColHandler} className="btn-design">
+          Delete Col 
+        </button>
+        <button onClick={readOnlyHandler} className="btn-design">
+          Read Only
+        </button>
+       
+        <button onClick={sortColHandler} className="btn-design">
+          Sort 
+        </button>
+    
       </div>
       <Spreadsheet
         data={data}
