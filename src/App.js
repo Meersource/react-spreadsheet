@@ -94,6 +94,7 @@ export default function App() {
     }
       setData(sData);
     }
+    setSLineCopy('')
   };
 
   const cutDataHandler = () => {
@@ -106,10 +107,24 @@ export default function App() {
   };
 
   const addRowHandler = () => {
+    let cell= data.length
+    
+    if(MSCP.length > 0){
+      cell =MSCP[0].row+1
+    }
     let nData = [...data];
-    nData.splice(MSCP[0].row+1, 0 , [{ value: "" }, { value: "" }, { value: "" }])
+    nData.splice(cell, 0 , [{ value: "" }, { value: "" }, { value: "" }])
     setData(nData);
   };
+  // const addRowHandler = () => {
+  //   let nData = [...data];
+  //   nData.push([{ value: "" }, { value: "" }, { value: "" }]);
+  //   // for (var i = 0; i < nData.length; i++) {
+  //   //   nData[i].push({ value: 1 });
+  //   //   // nData.concat(newData);s
+  //   // }
+  //   setData(nData);
+  // };
 
   const addColHandler = () => {
     let nData = [...data];
@@ -118,7 +133,25 @@ export default function App() {
     }
     setData(nData);
   };
+  const deleteRowHandler = ()=>{
+    let nData=[...data]
+    // const selecteValues = MSCP.map((i) => MSCP[i].row);
+    // const selecteValues = MSCP[0].row;
+    MSCP.forEach(function(number,index){
+      nData.splice(number.row,1)
+    });
+    // if(nData.length===0){
+    //   nData.splice(0, 0 , [{ value: "" }, { value: "" }, { value: "" }])
+    // }
 
+
+    // nData.splice(selecteValues,1)
+    // console.log("del", selecteValues);
+    setData(nData)
+
+  }
+
+ 
   return (
     <div className="App">
       <h1>React-SpreadSheet</h1>
@@ -138,6 +171,9 @@ export default function App() {
         </button>
         <button onClick={addColHandler} className="btn-design">
           Add Column
+        </button>
+        <button onClick={deleteRowHandler} className="btn-design">
+          Delete Row
         </button>
       </div>
       <Spreadsheet
