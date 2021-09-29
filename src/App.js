@@ -2,12 +2,31 @@ import React, { useState } from "react";
 import "./App.css";
 import Spreadsheet from "react-spreadsheet";
 
+
+const clickHandler = () => {
+  console.log("hello", 0);
+}
+
+let button =(  <button onClick={clickHandler}> Click Me  </button> )
+
 export default function App() {
+  const RangeView = ({ cell }) => (
+    <button
+      type="button"
+      value={cell.value}
+      // disabled
+      onClick={clickHandler}
+    >click</button>
+  );
+  
+  const RangeEdit = ({ cell, onChange }) => (
+  console.log("hello")
+  );
   const [data, setData] = useState([
-    [{ value: 45 }, { value: 13 }, { value: 23 }],
+    [{ value: 45 }, { value: 13 }, { value: 23, clickable : false }],
     [{ value: 34 }, { value: 53 }, { value: 55 }],
     [{ value: 45 }, { value: 90 }, { value: 43 }],
-    [{ value: 78 }, { value: 21 }, { value: 54 }],
+    [{ value: 78 }, { value: 21 }, { DataViewer: RangeView}],
   ]); // State for Data of the Spreadsheet
   const [MSCP, setMSCP] = useState([]);
 
@@ -15,7 +34,6 @@ export default function App() {
 
   const [biggestCopiedRow, setBiggestCopiedRow] = useState([]); // My Biggest Copied Row Index
   const [smallestCopiedRow, setSmallestCopiedRow] = useState([]); // My Biggest Copied Row Index
-
   const onSelectCall = (fData) => {
     console.log(fData);
     if (fData) {
@@ -31,8 +49,22 @@ export default function App() {
     }
   };
 
+ 
   const copyMulDataHandler = () => {
     const selecteValues = MSCP.map((i) => data[i.row][i.column].value);
+
+    let newArr = []
+
+    MSCP.forEach(function (number, index){
+      newArr.push({
+        index: {
+          row: number.row,
+          column: number.column
+        },
+        value: data[number.row][number.column].value
+      })  
+    })
+
 
     if(MSCP.length > 1){
       let count = 0;
@@ -54,6 +86,7 @@ export default function App() {
       console.log("Smallest Selected Row: ", smallestRow,"Biggest Selected Row: ", biggestRow);
       console.log("Smallest Copied Row: ", smallestCopiedRow,"Biggest Copied Row: ", biggestCopiedRow);
     }
+    console.log("New Array: ", newArr);
 
     setSLineCopy(selecteValues);
   };
@@ -107,7 +140,11 @@ export default function App() {
 
   const addRowHandler = () => {
     let nData = [...data];
-    nData.splice(MSCP[0].row+1, 0 , [{ value: "" }, { value: "" }, { value: "" }])
+    let selectedCellPoint = data.length;
+    if(MSCP.length > 0){
+      selectedCellPoint = MSCP[0].row+1
+    }
+    nData.splice(selectedCellPoint, 0 , [{ value: "" }, { value: "" }, { value: "" }])
     setData(nData);
   };
 
@@ -118,6 +155,20 @@ export default function App() {
     }
     setData(nData);
   };
+
+  const readOnlyHandler = () => {
+       
+      let nData = [...data]
+
+      MSCP.forEach(function (number, index) {
+        nData[number.row].splice([number.column], 1, {value: nData[number.row][number.column].value, readOnly : true} );
+      });
+
+      setData(nData)
+
+
+    console.log("Selected Values", data);
+  }
 
   return (
     <div className="App">
@@ -139,6 +190,10 @@ export default function App() {
         <button onClick={addColHandler} className="btn-design">
           Add Column
         </button>
+        <button onClick={readOnlyHandler} className="btn-design">
+          Read Only
+        </button>
+        {button}
       </div>
       <Spreadsheet
         data={data}
