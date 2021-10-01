@@ -1,13 +1,62 @@
 import React, { useState } from "react";
 import "./App.css";
+import Laptop from './image/laptop.jpg'
 import Spreadsheet from "react-spreadsheet";
+import CheckB from "./CheckB";
+
+const imageAddress = "https://www.zanolliovens.com/wp-content/uploads/2016/04/default-placeholder.png";
 
 export default function App() {
+  const [TnC, setTnC] = useState("");
+
+//   const [TC, setTC] = useState("");
+
+//   const Check=({cell})=> {
+//     <input type="checkbox" onChange={(e)=>setTC(e.target.checked)} />
+//   }
+//   const CheckEdit=({cell,onChange})=>{
+// console.log("checkbox");
+//   }
+
+
+  const RangeView = ({ cell }) => (
+    // <input type="checkbox" onChange={(e)=>{checkboxHandler(e)}}/>
+    <img className="img-style" src={imageAddress} alt="img" />
+  );
+  
+  // const RangeEdit = ({ cell, onChange }) => (
+  //  checkboxHandler(cell)
+  // );
+
   const [data, setData] = useState([
-    [{ value: 45 }, { value: 13 }, { value: 23 }],
-    [{ value: 34 }, { value: 53 }, { value: 55 }],
-    [{ value: 45 }, { value: 90 }, { value: 43 }],
-    [{ value: 78 }, { value: 21 }, { value: 54 }],
+    [
+      { value: <CheckB /> ,readOnly: true},
+      { value: 1 },
+      { value: "Allen" },
+      { value: "This module is distributed" },
+      {DataViewer: RangeView,value:0, readOnly: true}
+    ],
+    [
+      { value: <CheckB /> },
+      { value: 2 },
+      { value: "Jeson" },
+      { value: "get the correct behavior of the grid you " },
+      {DataViewer: RangeView,value:0, readOnly: true}
+    ],
+    [
+      { value: <CheckB /> },
+      { value: 3 },
+      { value: "Peter" },
+      { value: "This is the most important prop" },
+      {DataViewer: RangeView,value:0, readOnly: true}
+    ],
+    [
+      { value: <input type="checkbox" /> },
+      { value: 4 },
+      { value: "Morgun" },
+      { value: "Pass this property if you want to initialize" },
+      {DataViewer: RangeView,value:0, readOnly: true}
+    ],
   ]);
   const [MSCP, setMSCP] = useState([]);
   const [Copy, setCopy] = useState([]);
@@ -16,7 +65,7 @@ export default function App() {
   const [smallestCopiedRow, setSmallestCopiedRow] = useState([]); // My Biggest Copied Row Index
 
   const onSelectCall = (fData) => {
-    console.log(fData);
+    console.log("selected data", fData);
     if (fData) {
       let newArr = [];
       for (let i = 0; i < fData.length; i++) {
@@ -28,7 +77,7 @@ export default function App() {
         setMSCP(newArr);
       }
     }
-    console.log("MSCP:",MSCP);
+    console.log("MSCP:", MSCP);
   };
 
   const copyDataHandler = () => {
@@ -71,7 +120,7 @@ export default function App() {
     if (Copy.length >= 1) {
       let sData = [...data];
       MSCP.forEach(function (number, index) {
-        console.log("Pnumber : ",number + "index",index);
+        console.log("Pnumber : ", number + "index", index);
         sData[number.row][number.column].value = Copy[index];
       });
 
@@ -120,11 +169,22 @@ export default function App() {
     }
     setCopy("");
   };
+  // MSCP[0]data.map((item) => {
+  //   return(
+  //     <input
+  //     type="checkbox"
+  //     value={TnC}
+  //     onChange={(e) => setTnC(e.target.checked)}
+  //   />
+
+  //   )
+  // });
 
   const cutDataHandler = () => {
     copyDataHandler();
     let sData = [...data];
     MSCP.forEach(function (number, index) {
+      // console.log("number :",number, "index: ",index);
       sData[number.row][number.column].value = "";
     });
     setData(sData);
@@ -137,9 +197,15 @@ export default function App() {
       cell = MSCP[0].row + 1;
     }
     let nData = [...data];
-    nData.splice(cell, 0, [{ value: "" }, { value: "" }, { value: "" }]);
+    nData.splice(cell, 0, [
+      { value: <CheckB /> },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      {DataViewer: RangeView,value:0, readOnly: true}
+      
+    ]);
     setData(nData);
-
   };
   // const addRowHandler = () => {
   //   let nData = [...data];
@@ -153,13 +219,12 @@ export default function App() {
 
   const addColHandler = () => {
     let nData = [...data];
-    let position = nData[0].length
-    if(MSCP.length>0){
-      position= MSCP[0].column +1
-     
+    let position = nData[0].length;
+    if (MSCP.length > 0) {
+      position = MSCP[0].column + 1;
     }
     for (var i = 0; i < nData.length; i++) {
-      nData[i].splice(position,0,{ value: "" });
+      nData[i].splice(position, 0, { value: "" });
     }
     setData(nData);
   };
@@ -172,7 +237,19 @@ export default function App() {
     });
     setData(nData);
   };
-  const deleColHandler = () =>{
+  // const colorRow={
+  //   backgroundColor:"red";
+  // }
+  // const colorRowHandler = () => {
+  //   let nData = [...data];
+  //   // const selecteValues = MSCP.map((i) => MSCP[i].row);
+  //   // const selecteValues = MSCP[0].row;
+  //   MSCP.forEach(function (number, index) {
+  //     nData.splice(number.row, 0, style={{backgroundColor: "lightblue"}});
+  //   });
+  //   setData(nData);
+  // };
+  const deleColHandler = () => {
     let nData = [...data];
     let position = nData[0].length;
     if (MSCP.length > 0) {
@@ -182,30 +259,36 @@ export default function App() {
       nData[i].splice(position, 1);
     }
     setData(nData);
-  }
+  };
   const readOnlyHandler = () => {
-       
-    let nData = [...data]
+    let nData = [...data];
 
     MSCP.forEach(function (number, index) {
-      nData[number.row].splice([number.column], 1, {value: nData[number.row][number.column].value, readOnly : true});
+      nData[number.row].splice([number.column], 1, {
+        value: nData[number.row][number.column].value,
+        readOnly: true,
+      });
     });
 
-    setData(nData)
+    setData(nData);
 
-
-  console.log("Selected Values", data);
-}
-  const sortColHandler =() =>{
-    let nData= [...data]
-    for(let i=0; i<data.length; i++) {
-      nData[i].MSCP[0].column.sort()
+    console.log("Selected Values", data);
+  };
+  const sortColHandler = () => {
+    let nData = [...data];
+    for (let i = 0; i < data.length; i++) {
+      nData[i].MSCP[0].column.sort();
     }
-  }
+  };
+  // const checkboxHandler = (e)=>{
+  //   // setTnC(e.target)
+  //   console.log(e);
+  // }
 
   return (
     <div className="App">
-      <h1>React-SpreadSheet</h1>
+      <h1>React-SpreadSheet {TnC}</h1>
+      {console.log("TnC", TnC)}
 
       <div className="section-design">
         <button onClick={copyDataHandler} className="btn-design">
@@ -227,16 +310,15 @@ export default function App() {
           Delete Row
         </button>
         <button onClick={deleColHandler} className="btn-design">
-          Delete Col 
+          Delete Col
         </button>
         <button onClick={readOnlyHandler} className="btn-design">
           Read Only
         </button>
-       
+
         <button onClick={sortColHandler} className="btn-design">
-          Sort 
+          Sort
         </button>
-    
       </div>
       <Spreadsheet
         data={data}
@@ -244,8 +326,22 @@ export default function App() {
         onSelect={(data) => {
           onSelectCall(data);
         }}
-        rowLabels={["Q0", "Q1", "Q2", "Q3"]}
+        columnLabels={["Select", "Id", "Name", "Description"]}
+        hideRowIndicators
+        // rowLabels={["Q0", "Q1", "Q2", "Q3"]}
       />
+      {/* <input
+        type="checkbox"
+        value={TnC}
+        onChange={checkboxHandler}
+      /> */}
+      <CheckB />
     </div>
   );
 }
+
+// {
+//   DataEditor: () => {},
+//   DataViewer: function noRefCheck() {},
+//   value: 0
+// }
