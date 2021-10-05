@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import Laptop from './image/laptop.jpg'
 import Spreadsheet from "react-spreadsheet";
 import CheckB from "./CheckB";
 
@@ -28,6 +27,20 @@ export default function App() {
   //  checkboxHandler(cell)
   // );
 
+  const BtnRangeView = ({ cell }) => (
+    <button
+      onClick={RangeEdit}
+      style={{ pointerEvents: "none" }}
+    >click</button>
+  );
+
+  
+  const RangeEdit = ({ cell, onClick }) => (
+  console.log("button clicked")
+
+  
+  );
+
   const [data, setData] = useState([
     [
       { value: <CheckB /> ,readOnly: true},
@@ -39,9 +52,10 @@ export default function App() {
     [
       { value: <CheckB /> },
       { value: 2 },
+       {DataViewer: BtnRangeView, DataEditor: RangeEdit},
       { value: "Jeson" },
       { value: "get the correct behavior of the grid you " },
-      {DataViewer: RangeView,value:0, readOnly: true}
+      {DataViewer: RangeView,value:0, readOnly: true},
     ],
     [
       { value: <CheckB /> },
@@ -326,7 +340,7 @@ export default function App() {
         onSelect={(data) => {
           onSelectCall(data);
         }}
-        columnLabels={["Select", "Id", "Name", "Description"]}
+        columnLabels={["Select", "Id", "Name", "Description","Image"]}
         hideRowIndicators
         // rowLabels={["Q0", "Q1", "Q2", "Q3"]}
       />
