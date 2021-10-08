@@ -90,12 +90,10 @@ class CustomDataTable extends React.Component {
     };
     this.rowSelectCritera = this.rowSelectCritera.bind(this);
     this.handleRowSelected = this.handleRowSelected.bind(this);
-    // this.toggleCleared = this.toggleCleared.bind(this);
   }
 
   buttonHandler = (row, e) => {
     console.log("row:", row, "e", e);
-    // this.setState({selectRow: row})
   };
   onRowClicked = (row) => {
     console.log("row clicked", row);
@@ -127,7 +125,6 @@ class CustomDataTable extends React.Component {
       return Number(eventId) !== val.id;
     });
     this.setState({ data: newData });
-    // console.log(row.target.id, 'checkit')
     console.log("id", eventId);
     console.log("all data:", newData, sData);
   };
@@ -164,12 +161,6 @@ class CustomDataTable extends React.Component {
   handleRowSelected(row) {
     console.log("handle rowSelection: ", row.selectedRows);
     this.setState({ selectRow: row.selectedRows });
-  }
-
-  hidHandler() {
-    // selectedState= this.state.selectRow
-    let toggle = !this.state.hideButton;
-    this.setState({ hideButton: toggle });
   }
 
   render() {
@@ -302,13 +293,6 @@ class CustomDataTable extends React.Component {
         <button onClick={this.pasteHandler}>Paste</button>
         <button onClick={this.deleteHandler}>Delete</button>
         <button onClick={this.hideHandler}>Hide</button>
-        <button
-          onClick={() => {
-            this.hidHandler();
-          }}
-        >
-          hid
-        </button>
         <button onClick={this.unHideHandler}>UnHide</button>
 
         <DataTable
