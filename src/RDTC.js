@@ -4,45 +4,73 @@ import "./App.css";
 
 let data = [
   {
-    id: 1,
+    id: 0,
     title: "Conan the Barbarian",
     year: 1982,
     parameters: [
       { name: "speed", value: 20 },
+      { name: "weight", value: 13 },
+      { name: "height", value: 54 },
+      { name: "length", value: 40 },
     ],
   },
-  { id: 2, title: "Men in Black", year: 1999 },
-  { id: 3, title: "Men in Black 2", year: 2002,
-  parameters: [
-    { name: "length", value: 40 },
-  ], },
   {
-    id: 4,
+    id: 1,
+    title: "Men in Black",
+    year: 1999,
+    parameters: [
+      { name: "speed", value: 240 },
+      { name: "weight", value: 123 },
+      { name: "height", value: 554 },
+      { name: "length", value: 480 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Men in Black 2",
+    year: 2002,
+    parameters: [
+      { name: "speed", value: 240 },
+      { name: "weight", value: 123 },
+      { name: "height", value: 554 },
+      { name: "length", value: 480 },
+    ],
+  },
+  {
+    id: 3,
     title: "Beetlejuice",
     year: "1988",
     parameters: [
-      { name: "weight", value: 20 },
+      { name: "speed", value: 20 },
+      { name: "weight", value: 13 },
+      { name: "height", value: 54 },
+      { name: "length", value: 40 },
     ],
   },
   {
-
-    id: 5,
+    id: 4,
     title: "Ghostbusters",
     year: "1984",
     parameters: [
-      { name: "weight", value: 20 },
-      { name: "height", value: 30 },
+      { name: "speed", value: 50 },
+      { name: "weight", value: 12 },
+      { name: "height", value: 66 },
+      { name: "length", value: 53 },
+    ],
+  },
+  {
+    id: 5,
+    title: "Dune",
+    year: "2021",
+    parameters: [
+      { name: "speed", value: 140 },
+      { name: "weight", value: 57 },
+      { name: "height", value: 34 },
+      { name: "length", value: 25 },
     ],
   },
 ];
 
-// const StyledCell = styled.div`
-//    {
-//     background: green !important;
-//     width: 100%;
-//     height: 100%;
-//   }
-// `;
 const paginationComponentOptions = {
   rowsPerPageText: "Filas por página",
   rangeSeparatorText: "de",
@@ -58,7 +86,7 @@ class CustomDataTable extends React.Component {
       selectRow: [],
       copiedRow: [],
       hideRow: [],
-      hideButton: false,
+      // hideButton: false,
     };
     this.rowSelectCritera = this.rowSelectCritera.bind(this);
     this.handleRowSelected = this.handleRowSelected.bind(this);
@@ -138,10 +166,6 @@ class CustomDataTable extends React.Component {
     this.setState({ selectRow: row.selectedRows });
   }
 
-  // toggleCleared(row) {
-  //   console.log(row);
-  //   // this.setState({ selectRow: row.selectedRows });
-  // }
   hidHandler() {
     // selectedState= this.state.selectRow
     let toggle = !this.state.hideButton;
@@ -178,23 +202,10 @@ class CustomDataTable extends React.Component {
             borderRightStyle: "solid",
             borderRightWidth: "1px",
             borderRightColor: defaultThemes.default.divider.default,
-            // background: color
           },
         },
       },
     };
-    // let tData=this.state.data
-    // let a = data.map((val) => {
-    //   return [
-    //     {
-    //       name: val.name,
-    //       selector: (row) => row.title,
-    //       style: (row) => row.style,
-    //       sortable: true,
-    //       // style: { height: "50px" },
-    //     },
-    //   ];
-    // });
 
     const columns = [
       {
@@ -204,7 +215,7 @@ class CustomDataTable extends React.Component {
         sortable: true,
         // style: { height: "50px" },
       },
-     
+
       {
         name: "Year",
         selector: (row) => row.year,
@@ -231,9 +242,6 @@ class CustomDataTable extends React.Component {
       {
         name: "Print",
         selector: (row) => row.print,
-        // style: (row) => ({
-        //   backgroundColor: row.isSpecial ? "pink" : "#FFA500",
-        // }),
         ignoreRowClick: true,
         cell: (row) => (
           // <button onClick={(e) => this.buttonHandler(row, e)}>click</button>
@@ -255,29 +263,16 @@ class CustomDataTable extends React.Component {
         ),
       },
     ];
+    console.log(data.map((i) => i.parameters)[0], "checkyhisconsole");
+    const arr = data
+      .map((i) => i.parameters)[0]
+      .map((j, key) => {
+        return {
+          name: j.name,
+          selector: (row) => data[row.id].parameters[key].value,
+        };
+      });
 
-
-    let arr = [];
-    data.forEach((i) => {
-      console.log("i",i)
-      if (i.parameters) {
-        const uniques = Object.values(
-          i.parameters.reduce((a, c) => {
-            a[c + '|' + c] = c;
-            return a
-          }, {}))
-          uniques.forEach((j) => {
-          console.log("j", j);
-          const singleCol = {
-            name: j.name,
-            selector: (row) => j.value,
-          };
-          arr.push(singleCol);
-        });
-      } else {
-        return null;
-      }
-    });
     let newColumn = [...columns, ...arr];
 
     const conditionalRowStyles = [
@@ -325,7 +320,6 @@ class CustomDataTable extends React.Component {
           paginationDefaultPage={50}
           selectableRowSelected={this.rowSelectCritera}
           onSelectedRowsChange={this.handleRowSelected}
-          // clearSelectedRows={this.toggleCleared}
           striped
           highlightOnHover
           dense
