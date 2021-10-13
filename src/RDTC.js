@@ -235,7 +235,6 @@ class CustomDataTable extends React.Component {
         selector: (row) => row.print,
         ignoreRowClick: true,
         cell: (row) => (
-          // <button onClick={(e) => this.buttonHandler(row, e)}>click</button>
           <img
             src="https://i.picsum.photos/id/239/200/200.jpg?hmac=8JqlXUpZ9Xy0H6tMK8sCPQAYU9vUn9Qa8Kg-U9h3sCY"
             alt=""
