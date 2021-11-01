@@ -78,6 +78,11 @@ const paginationComponentOptions = {
   paginationDefaultPage: 50,
   selectAllRowsItemText: "Todos",
 };
+
+
+
+
+
 class CustomDataTable extends React.Component {
   constructor(props) {
     super(props);
@@ -99,16 +104,20 @@ class CustomDataTable extends React.Component {
     console.log("row clicked", row);
   };
 
+  copyHandler = () => {
+    const copy = this.state.selectRow;
+    const selectedIndex = this.state.columns
+    console.log(data.map((i) => i)[0], "selectedIndex");
+
+    console.log(" index", selectedIndex)
+    this.setState({ copiedRow: copy });
+  };
   pasteHandler = () => {
     const copiedRow = this.state.copiedRow;
     const statedata = this.state.data;
     this.setState({ data: [...statedata, ...copiedRow] });
   };
 
-  copyHandler = () => {
-    const copy = this.state.selectRow;
-    this.setState({ copiedRow: copy });
-  };
 
   deleteHandler = () => {
     let sData = [...this.state.data];
@@ -158,7 +167,7 @@ class CustomDataTable extends React.Component {
     this.setState({ data: [...hideRow, ...statedata], hideRow: [] });
   };
 
-  handleRowSelected(row) {
+  handleRowSelected(row, index) {
     console.log("handle rowSelection: ", row.selectedRows);
     this.setState({ selectRow: row.selectedRows });
   }
@@ -198,7 +207,15 @@ class CustomDataTable extends React.Component {
       },
     };
 
+     let bData= (row,index) => index + 1
+
     const columns = [
+       {
+          name: 'Sr #',
+          // cell: (row,index) => index + 1,
+         cell:bData,
+          grow: 0,
+        },
       {
         name: "Title",
         selector: (row) => row.title,
