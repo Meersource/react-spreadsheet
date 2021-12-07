@@ -125,14 +125,23 @@ const Recharts = () => {
     );
 
     return (
-        <div style={{ margin: '50px 100px' }} >
-            <h1>Recharts Demo</h1>
-            <h2>Bar Chart</h2>
-            {composedChartDemo}
+        <div style={{ margin: '50px 100px', display: 'flex' }} >
+            {/* <div>
+                <h1>Recharts Demo</h1>
+            </div> */}
+            <div>
+                <h3>Bar Chart</h3>
+                {composedChartDemo}
+            </div>
+            <div>
+                <h3>Stacked Bar Chart</h3>
+                {stackedBarChart}
+            </div>
+
+
             <br />
 
-            <h2>Stacked Bar Chart</h2>
-            {stackedBarChart}
+
             {/* {stackedBarChartWithRealData} */}
         </div >)
 };
