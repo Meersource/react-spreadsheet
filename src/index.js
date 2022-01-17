@@ -6,6 +6,8 @@ import CustomDataTable from "./RDTC"
 import AgGrid from './agGrid'
 import Recharts from './Recharts'
 import Plotly from './Plotly'
+import ComponentA from './ComponentA'
+import ComponentB from './ComponentB'
 
 ReactDOM.render(
   // <App />
@@ -14,8 +16,10 @@ ReactDOM.render(
     {/* <AgGrid /> */}
     {/* <h1>Recharts Demo</h1>
     <Recharts /> */}
-    <h1>Plotly Demo</h1>
-    <Plotly />
+    {/* <h1>Plotly Demo</h1> */}
+    {/* <Plotly /> */}
+    <ComponentA />
+    <ComponentB />
   </>
   ,
   document.getElementById('root')
