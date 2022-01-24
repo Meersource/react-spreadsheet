@@ -29,4 +29,39 @@ margin-left: 20px;
 
   }
 
+  /* .ag-cell-label-container {
+    height: 100%;
+    color: #c63545;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .ag-header-cell-label {
+    justify-content: center;
+ }
 
+ .ag-row .ag-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+/* .ag-cell {
+  white-space: normal;
+  word-break: break-all;
+} */
+/* .ag-header-cell-text {
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+} */
+
+.ag-cell-focus,.ag-cell-no-focus{
+  border:none !important;
+}
+
+/* div.ag-root .ag-cell-focus {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+} */
