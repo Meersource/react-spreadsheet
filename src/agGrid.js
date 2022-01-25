@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
+import 'ag-grid-enterprise';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
@@ -14,15 +15,8 @@ const AgGrid = (props) => {
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
 
-  const actionsRenderer = (params) => {
-    const { id } = params.data;
-    return <>
-      <button onClick={() => props.editHandler(id)}>Edit</button>
-      <button onClick={() => props.deleteHandler(id)}>Delete</button>
-    </>;
-  };
 
-  const actions = { field: 'Actions', resizable: true, cellRenderer: 'actionsRenderer', cellRendererFramework: actionsRenderer, width: '100px' };
+
 
   const onGridReady = (params) => {
     setGridApi(params.api);
@@ -30,9 +24,17 @@ const AgGrid = (props) => {
   };
 
   useEffect(() => {
+    const actionsRenderer = (params) => {
+      const { id } = params.data;
+      return <>
+        <button onClick={() => props.editHandler(id)}>Edit</button>
+        <button onClick={() => props.deleteHandler(id)}>Delete</button>
+      </>;
+    };
+    const actions = { field: 'Actions', cellRenderer: 'actionsRenderer', cellRendererFramework: actionsRenderer };
     setRowData(props.data);
     setTableColumns([...props.columns, actions]);
-  }, [props.data, props.columns]);
+  }, [props]);
 
   const getSelectedRowData = () => {
     if (gridApi !== null) {
@@ -187,7 +189,7 @@ const AgGrid = (props) => {
     props.getTableState(tableData, selectedRows, unSelectedRows);
   };
 
-  console.log(tableColumns, 'arr123');
+  console.log(gridApi, 'arr123');
   return (
     <div className="ag-theme-alpine" style={{ height: 400, width: 1800 }}>
       {/* onRowEditingStarted={RowEditingStarted} */}
@@ -205,8 +207,10 @@ const AgGrid = (props) => {
         onRowClicked={(r) => rowClick(r)}
         onRowDoubleClicked={(row) => rowDoubleClicked(row)}
         // ref={gridRef}
-        rowSelection="multiple"
+        onCellValueChanged={(e) => console.log(e)}
         // suppressRowClickSelection={true}
+        // rowSelection="multiple"
+        // rowMultiSelectWithClick={true}
 
         onCellClicked={(e) => onCellClicked(e)}
         rowData={rowData}
@@ -222,6 +226,7 @@ const AgGrid = (props) => {
         // owDragEnter={onRowDragEnter}
         // getRowStyle={getRowStyle}
         // pagination={true}
+        // paginationPageSize={10}
         // onRowDragMove={onRowDragMove}
         // onRowDragLeave={onRowDragLeave}
         onCellFocused={e => onCellFocused(e)}
@@ -232,13 +237,16 @@ const AgGrid = (props) => {
             field={i.field}
             resizable={i.resizable}
             sortable={i.sortable}
+            editable={i.editable}
             filter={i.filter}
             pinned={i.pinned}
             cellRendererFramework={i.cellRendererFramework}
-            cellStyle={props.cellStyle}
+            cellStyle={i.cellStyle}
             headerName={i.headerName}
             valueGetter={i.valueGetter}
+            valueSetter={i.valueSetter}
             checkboxSelection={i.checkboxSelection}
+            headerCheckboxSelection={i.headerCheckboxSelection}
             // width={i.width}
             wrapText={i.wrapText}
           ></AgGridColumn>)}

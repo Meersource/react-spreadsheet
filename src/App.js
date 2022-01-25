@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import AgGrid from './agGrid';
 
 const data = [
-  { id: 1, index: 1, position: true, make: "Toyota", model: "Celica", price: 35000, articles: [{ name: 'weight', unit: 'kg', value: '1' }, { name: 'height', unit: 'm', value: '2' }] },
-  { id: 2, index: 2, position: false, make: "Ford", model: "Mondeo", price: 32000, articles: [{ name: 'weight', unit: 'kg', value: '5' }, { name: 'height', unit: 'm', value: '2' }] },
-  { id: 3, index: 3, position: false, make: "Porsche", model: "Boxter", price: 72000, articles: [{ name: 'height', unit: 'm', value: '2' }, { name: 'weight', unit: 'kg', value: '3' }] },
-  { id: 4, index: 4, position: false, make: "Toyota", model: "Celica", price: 35000, articles: [{ name: 'weight', unit: 'kg', value: '4' }, { name: 'height', unit: 'm', value: '2' }] },
-  { id: 5, index: 5, position: false, make: "Ford", model: "Mondeo", price: 32000, articles: [{ name: 'weight', unit: 'kg', value: '5' }, { name: 'height', unit: 'm', value: '2' }] },
-  { id: 6, index: 6, position: false, make: "Porsche", model: "Boxter", price: 72000, articles: [{ name: 'weight', unit: 'kg', value: '6' }, { name: 'height', unit: 'm', value: '2' }] }
+  { id: 1, index: 1, position: true, make: "Toyota", model: "Celica", price: 35000, demo: { value: 1, used: true }, articles: [{ name: 'weight', unit: 'kg', value: '1' }, { name: 'height', unit: 'm', value: '2' }] },
+  { id: 2, index: 2, position: false, make: "Ford", model: "Mondeo", price: 32000, demo: { value: 1, used: true }, articles: [{ name: 'weight', unit: 'kg', value: '5' }, { name: 'height', unit: 'm', value: '2' }] },
+  { id: 3, index: 3, position: false, make: "Porsche", model: "Boxter", price: 72000, demo: { value: 3, used: true }, articles: [{ name: 'height', unit: 'm', value: '2' }, { name: 'weight', unit: 'kg', value: '3' }] },
+  { id: 4, index: 4, position: false, make: "Toyota", model: "Celica", price: 35000, demo: { value: 1, used: false }, articles: [{ name: 'weight', unit: 'kg', value: '4' }, { name: 'height', unit: 'm', value: '2' }] },
+  { id: 5, index: 5, position: false, make: "Ford", model: "Mondeo", price: 32000, demo: { value: 1, used: true }, articles: [{ name: 'weight', unit: 'kg', value: '5' }, { name: 'height', unit: 'm', value: '2' }] },
+  { id: 6, index: 6, position: false, make: "Porsche", model: "Boxter", price: 72000, demo: { value: 1, used: true }, articles: [{ name: 'weight', unit: 'kg', value: '6' }, { name: 'height', unit: 'm', value: '2' }] }
 ];
 
 function MyRenderer(params) {
@@ -27,12 +27,25 @@ function MyRenderer(params) {
   );
 };
 
+function Renderer(params) {
+  const backgroundColor = params.value === true ? 'green' : 'grey';
+  const { value } = params.value;
+  return value;
+};
+
+function newValueSetter(params) {
+  console.log(params, 'cellparams')
+  params.data.demo = { value: params.newValue }
+  return true;
+}
+
 const columns = [
-  { field: 'position', checkboxSelection: true, rowDrag: true, resizable: true, cellRendererFramework: MyRenderer, width: '100px' },
-  { field: 'index', resizable: true, width: '80px' },
-  { field: 'make', sortable: true, filter: true, resizable: true, width: '180px' },
-  { field: 'model', resizable: true, width: '180px' },
-  { field: 'price', resizable: true, width: '180px' },
+  { field: 'position', checkboxSelection: true, headerCheckboxSelection: true, rowDrag: true, resizable: true, cellRendererFramework: MyRenderer, width: '100px' },
+  { field: 'index', resizable: true, editable: true, width: '80px' },
+  { field: 'make', sortable: true, editable: true, filter: true, resizable: true, width: '180px' },
+  { field: 'model', resizable: true, editable: true, width: '180px' },
+  { field: 'price', resizable: true, editable: true, width: '180px' },
+  { field: 'demo', resizable: true, editable: true, cellStyle: (p) => { return p.value.used === false ? { backgroundColor: 'black', color: 'white' } : {} }, valueGetter: (p) => p.data.demo.value, valueSetter: newValueSetter, width: '180px' },
   // { displayName: 'new', valueGetter: (params) => params.data.articles[0].value, resizable: true, },
 ];
 
@@ -54,7 +67,8 @@ const App = () => {
       .map((j) => ({
         headerName: `${j.name} (${j.unit})`,
         field: j.name,
-        valueGetter: (params) => newValueGetter(params)
+        editable: true,
+        valueGetter: newValueGetter
       }));
     setColumnsData(prevColumns => prevColumns.length === columns.length ? [...prevColumns, ...arr] : [...prevColumns]);
   }, [rowData]);
