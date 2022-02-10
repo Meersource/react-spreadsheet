@@ -11,10 +11,12 @@ import ComponentA from './ComponentA'
 import ComponentB from './ComponentB'
 import ReactTable from './react-table'
 import Study from './StudyTable'
+import VideoConverter from './convert-video';
 
 ReactDOM.render(
   <div style={{ margin: '10px' }}>
-    <App />
+    {/* <App /> */}
+    <VideoConverter />
     {/* <Study /> */}
     {/* <ReactSpreadSheet /> */}
     {/* <CustomDataTable /> */}

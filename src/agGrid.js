@@ -209,7 +209,7 @@ const AgGrid = (props) => {
         // ref={gridRef}
         onCellValueChanged={(e) => console.log(e)}
         // suppressRowClickSelection={true}
-        // rowSelection="multiple"
+        rowSelection="multiple"
         // rowMultiSelectWithClick={true}
 
         onCellClicked={(e) => onCellClicked(e)}
