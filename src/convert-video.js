@@ -7,6 +7,8 @@ const VideoConverter = () => {
     const [percentage, setPercentage] = useState(null)
 
     const changeHandler = async (e) => {
+        const startTime = new Date();
+        console.log(new Date())
         const file = e.target.files[0];
         const ffmpeg = createFFmpeg({ corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js", log: true });
         await ffmpeg.load();
@@ -14,11 +16,14 @@ const VideoConverter = () => {
         ffmpeg.setProgress(({ ratio }) => {
             setPercentage(Math.round(ratio * 100));
         });
-        await ffmpeg.run("-i", file.name, "output.mp4");
+        await ffmpeg.run("-i", file.name, `-preset`, `ultrafast`, "output.mp4");
         const data = ffmpeg.FS("readFile", "output.mp4");
         setSource(
             URL.createObjectURL(new Blob([data.buffer], { type: "video/mp4" }))
         );
+        const endTime = new Date();
+        const duration = endTime - startTime;
+        console.log(startTime, endTime, duration, 'duration')
     }
 
     return <div>
