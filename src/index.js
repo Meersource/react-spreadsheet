@@ -12,11 +12,15 @@ import './index.css';
 // import Study from './StudyTable'
 // import VideoConverter from './convert-video';
 // import FormCreator from './FormBuilder'
-import PDFLibrary from './PDFLibrary';
+// import PDFLibrary from './PDFLibrary';
+import ReactDND from './React-dnd/index'
+// import ActiveReports from './ActiveReports'
 
 ReactDOM.render(
   <div style={{ margin: '10px' }}>
-    <PDFLibrary />
+    {/* <PDFLibrary /> */}
+    <ReactDND />
+    {/* <ActiveReports /> */}
     {/* <FormCreator /> */}
     {/* <App /> */}
     {/* <VideoConverter /> */}

@@ -24,8 +24,6 @@
 // export default FormBuilder;
 
 
-// import React from "react";
-// import ReactDOM from "react-dom";
 // import { FormBuilder } from "th-react-formbuilder";
 
 // const items = [
@@ -61,7 +59,7 @@
 
 // export default FormCreator;
 
-
+        // Working Example 1
 
 // import React, { Component } from 'react'
 
@@ -116,7 +114,6 @@
 //             form: data
 //         });
 //         console.log(data)
-//         var name = this.state.form.name.value;
 //     }
 //     render() {
 //         return <FormBuilder
@@ -129,20 +126,18 @@
 
 // export default Example;
 
+// working example 2
+
+import { ReactFormBuilder } from 'react-form-builder2';
+import 'react-form-builder2/dist/app.css';
+
+const FormCreator = () => {
+    return <div style={{ width: '90%' }}> <ReactFormBuilder /></div>
+};
+
+export default FormCreator;
 
 
-// import { ReactFormBuilder } from 'react-form-builder2';
-// import 'react-form-builder2/dist/app.css';
-
-// const FormCreator = () => {
-//     return <div style={{ width: '90%' }}> <ReactFormBuilder /></div>
-// };
-
-// export default FormCreator;
-
-
-// import React from 'react';
-// import ReactDOM from 'react-dom';
 
 // import FormBuilder from 'js-form-builder';
 
