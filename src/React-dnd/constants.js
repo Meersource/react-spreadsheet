@@ -11,7 +11,7 @@ export const SIDEBAR_ITEMS = [
         type: SIDEBAR_ITEM,
         component: {
             type: "input",
-            content: "Some input"
+            content: "Ciclo Normal"
         }
     },
     {
@@ -19,7 +19,7 @@ export const SIDEBAR_ITEMS = [
         type: SIDEBAR_ITEM,
         component: {
             type: "name",
-            content: "Some name"
+            content: "Tiempo máquina"
         }
     },
     {
@@ -27,7 +27,7 @@ export const SIDEBAR_ITEMS = [
         type: SIDEBAR_ITEM,
         component: {
             type: "email",
-            content: "Some email"
+            content: "Tiempo espera"
         }
     },
     {
@@ -35,7 +35,7 @@ export const SIDEBAR_ITEMS = [
         type: SIDEBAR_ITEM,
         component: {
             type: "phone",
-            content: "Some phone"
+            content: "Ocupación hombre"
         }
     },
     {
@@ -43,7 +43,16 @@ export const SIDEBAR_ITEMS = [
         type: SIDEBAR_ITEM,
         component: {
             type: "image",
-            content: "Some image"
+            content: "Ocupación máquina"
+        }
+    },
+    {
+        id: shortid.generate(),
+        type: SIDEBAR_ITEM,
+        component: {
+            type: "test",
+            content: "Test"
         }
     }
+
 ];

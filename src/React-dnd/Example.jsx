@@ -26,6 +26,7 @@ const Container = () => {
     const handleDropToTrashBin = useCallback(
         (dropZone, item) => {
             const splitItemPath = item.path.split("-");
+            console.log(layout, item, splitItemPath)
             setLayout(handleRemoveItemFromLayout(layout, splitItemPath));
         },
         [layout]
@@ -36,7 +37,6 @@ const Container = () => {
 
             const splitDropZonePath = dropZone.path.split("-");
             const pathToDropZone = splitDropZonePath.slice(0, -1).join("-");
-
             const newItem = { id: item.id, type: item.type };
             if (item.type === COLUMN) {
                 newItem.children = item.children;

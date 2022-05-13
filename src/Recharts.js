@@ -74,7 +74,6 @@ const Recharts = () => {
         );
     };
 
-    console.log(lodash.toPairs(chartColors))
     const stackedBarChart = (
         <ResponsiveContainer height={300} width={800}>
             <BarChart layout="vertical" data={chartData}>
@@ -126,9 +125,6 @@ const Recharts = () => {
 
     return (
         <div style={{ margin: '50px 100px', display: 'flex' }} >
-            {/* <div>
-                <h1>Recharts Demo</h1>
-            </div> */}
             <div>
                 <h3>Bar Chart</h3>
                 {composedChartDemo}
@@ -137,12 +133,6 @@ const Recharts = () => {
                 <h3>Stacked Bar Chart</h3>
                 {stackedBarChart}
             </div>
-
-
-            <br />
-
-
-            {/* {stackedBarChartWithRealData} */}
         </div >)
 };
 export default Recharts;

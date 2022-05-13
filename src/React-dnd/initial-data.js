@@ -62,7 +62,8 @@ const initialData = {
         component1: { id: "component1", type: "image", content: "Tiempo máquina" },
         component2: { id: "component2", type: "email", content: "Tiempo espera" },
         component3: { id: "component3", type: "name", content: "Ocupación hombre" },
-        component4: { id: "component4", type: "phone", content: "Ocupación máquina" }
+        component4: { id: "component4", type: "phone", content: "Ocupación máquina" },
+        // component5: { id: "component5", type: "table", content: "Table" }
     }
 };
 

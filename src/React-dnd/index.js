@@ -180,7 +180,6 @@ function ReactDND() {
         <div>
             <DndProvider backend={HTML5Backend}>
                 <Example />
-                <h1>hello</h1>
             </DndProvider>
         </div>
     );

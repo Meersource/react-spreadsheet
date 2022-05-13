@@ -1,41 +1,38 @@
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-// import ReactSpreadSheet from './react-spreadsheet';
-// import CustomDataTable from "./RDTC"
+// import ReactDataTableComponent from "./RDTC"
+// import Study from './StudyTable'
 // import AgGrid from './agGrid'
+// import ReactTable from './react-table'
 // import Recharts from './Recharts'
 // import Plotly from './Plotly'
-// import ComponentA from './ComponentA'
-// import ComponentB from './ComponentB'
-// import ReactTable from './react-table'
-// import Study from './StudyTable'
-// import VideoConverter from './convert-video';
-// import FormCreator from './FormBuilder'
 // import PDFLibrary from './PDFLibrary';
-import ReactDND from './React-dnd/index'
+// import VideoConverter from './convert-video';
+// import Report from './BoldReports/index'
 // import ActiveReports from './ActiveReports'
+// import FormCreator from './FormBuilder'
+// import ReactDND from './React-dnd/index'
+import SyncFusionSpreadSheet from './SyncFusionSpreadSheet/index'
 
 ReactDOM.render(
-  <div style={{ margin: '10px' }}>
-    {/* <PDFLibrary /> */}
-    <ReactDND />
-    {/* <ActiveReports /> */}
-    {/* <FormCreator /> */}
-    {/* <App /> */}
-    {/* <VideoConverter /> */}
-    {/* <Study /> */}
-    {/* <ReactSpreadSheet /> */}
-    {/* <CustomDataTable /> */}
-    {/* <AgGrid /> */}
-    {/* <h1>Recharts Demo</h1> */}
-    {/* <Recharts /> */}
-    {/* <h1>Plotly Demo</h1> */}
-    {/* <Plotly /> */}
-    {/* <ComponentA /> */}
-    {/* <ComponentB /> */}
-    {/* <ReactTable /> */}
-  </div>
+  // <div style={{ margin: '10px' }}>
+  //   {/* <App /> */}
+  //   {/* <ReactDataTableComponent /> */}
+  //   {/* <Study /> */}
+  //   {/* <AgGrid /> */}
+  //   {/* <ReactTable /> */}
+  //   {/* <Recharts /> */}
+  //   {/* <Plotly /> */}
+  //   {/* <PDFLibrary /> */}
+  //   {/* <VideoConverter /> */}
+  //   {/* <Report /> */}
+  //   {/* <ActiveReports /> */}
+  //   {/* <FormCreator /> */}
+  //   {/* <ReactDND /> */}
+  //   <SyncFusionSpreadSheet />
+  // </div>
+  <SyncFusionSpreadSheet />
   ,
   document.getElementById('root')
 );
