@@ -1,7 +1,14 @@
-import * as React from "react";
-import { SpreadsheetComponent, SheetsDirective, SheetDirective, RangesDirective } from "@syncfusion/ej2-react-spreadsheet";
-import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
-import { RangeDirective, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-spreadsheet';
+import {
+    SpreadsheetComponent,
+    SheetsDirective,
+    SheetDirective,
+    RangesDirective,
+    RangeDirective,
+    ColumnsDirective,
+    ColumnDirective,
+} from "@syncfusion/ej2-react-spreadsheet";
+// import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
+import Dropdown from 'react-multilevel-dropdown';
 
 import "./index.css"
 
@@ -12,30 +19,6 @@ import "./index.css"
 //     ShipName: 'Vins et alcools Chevalier',
 //     ShipCity: 'Reims',
 //     ShipAddress: '59 rue de lAbbaye'
-// },
-// {
-//     OrderID: 10249,
-//     CustomerID: 'TOMSP',
-//     EmployeeID: 6,
-//     ShipName: 'Toms Spezialitäten',
-//     ShipCity: 'Münster',
-//     ShipAddress: 'Luisenstr. 48'
-// },
-// {
-//     OrderID: 10250,
-//     CustomerID: 'HANAR',
-//     EmployeeID: 4,
-//     ShipName: 'Hanari Carnes',
-//     ShipCity: 'Rio de Janeiro',
-//     ShipAddress: 'Rua do Paço, 67'
-// },
-// {
-//     OrderID: 10251,
-//     CustomerID: 'VICTE',
-//     EmployeeID: 3,
-//     ShipName: 'Victuailles en stock',
-//     ShipCity: 'Lyon',
-//     ShipAddress: '2, rue du Commerce'
 // },
 // {
 //     OrderID: 10252,
@@ -49,10 +32,10 @@ import "./index.css"
 //     CustomerID: 'SUPRD',
 // }];
 
-const data = [{ name: 'rehman', age: '24' }, { name: 'asad', age: '25' },]
-
+const data = [{ name: 'rehman', age: '24' }, { name: 'asad', age: '25' }]
+const values = { ciclo: 2.340, exigido: 4.560, optimo: 1.230 }
+let spreadsheet = null;
 const SyncFusionSpreadSheet = () => {
-
     // const testData = new DataManager({
     //     url: 'https://js.syncfusion.com/demos/ejServices//wcf/Northwind.svc/Orders',
     //     crossDomain: true
@@ -60,217 +43,160 @@ const SyncFusionSpreadSheet = () => {
 
     // Triggers before going to the editing mode.
     const oncellEdit = (args) => {
-        // Preventing the editing in 5th(Amount) column.
+        console.log('hello')
+    };
+
+    const oncellSave = (args) => {
+        console.log('hello')
+    };
+
+    const beforeSave = (args) => {
         console.log(args)
-        if (args.address.includes('E')) {
-            args.cancel = true;
+    };
+
+    const onCreated = () => {
+        spreadsheet.cellFormat({ fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle' }, 'A1:F1');
+        // spreadsheet.merge('B1:C1');
+    }
+
+    const getNextKey = (key) => {
+        if (key === 'Z' || key === 'z') {
+            return String.fromCharCode(key.charCodeAt() - 25) + String.fromCharCode(key.charCodeAt() - 25); // AA or aa
+        } else {
+            var lastChar = key.slice(-1);
+            var sub = key.slice(0, -1);
+            if (lastChar === 'Z' || lastChar === 'z') {
+                // If a string of length > 1 ends in Z/z,
+                // increment the string (excluding the last Z/z) recursively,
+                // and append A/a (depending on casing) to it
+                return getNextKey(sub) + String.fromCharCode(lastChar.charCodeAt() - 25);
+            } else {
+                // (take till last char) append with (increment last char)
+                return sub + String.fromCharCode(lastChar.charCodeAt() + 1);
+            }
         }
     };
 
+    const colName = (n) => {
+        const ordA = 'a'.charCodeAt(0);
+        const ordZ = 'z'.charCodeAt(0);
+        const len = ordZ - ordA + 1;
+
+        let s = "";
+        while (n >= 0) {
+            s = String.fromCharCode(n % len + ordA) + s;
+            n = Math.floor(n / len) - 1;
+        }
+        return s;
+    }
+
     // Trigger before saving the edited cell content.
     const onbeforeCellSave = (args) => {
-        // Prevent saving the edited changes in 4th(Rate) column.
-        console.log(args)
-        if (args.address.includes('D')) {
-            args.cancel = true;
-            // Manually removes the editable state without saving the changes. Use `endEdit` method if you want to save the changes.
-            this.spreadsheet.closeEdit();
+        console.log('hello')
+        const cellAddress = args.address.split('!')[1]
+        const nextCell = getNextKey(cellAddress.replace(/[^a-z]/gi, ''))
+        const cellToEdit = `${nextCell}${cellAddress.replace(/\D/g, "")}`
+        spreadsheet.updateCell({ value: values[args.value.trim()] }, cellToEdit);
+    };
+
+    const beforeCellUpdate = (args) => {
+        console.log('hello')
+    };
+
+
+    const btnClick = (value) => {
+        const selectedCell = spreadsheet.selectionModule.startCell;
+        if (selectedCell) {
+            const address = `${colName(selectedCell[1])}${selectedCell[0] + 1}`
+            const args = { value: value, address: `!${address}` }
+            spreadsheet.updateCell({ value }, address);
+            onbeforeCellSave(args);
         }
     }
 
+    const save = () => {
+        spreadsheet.saveAsJson().then(Json => (console.log(Json)));
+    };
+
+    const addTable = (type) => {
+        const selectedCell = spreadsheet.selectionModule.startCell;
+        const elementsTable = ['Elemento', 'Description', 'TN', 'K', 'F', 'M', 'OW', 'IW', 'ER', 'IR', 'IC']
+        const articlesTable = ['Articulo', 'Description', 'TN', 'K', 'F', 'M', 'OW', 'IW', 'ER', 'IR', 'IC']
+        const col = type === 'elements' ? elementsTable : articlesTable
+        if (selectedCell) {
+            let address = `${colName(selectedCell[1])}${selectedCell[0] + 1}`
+            col.forEach(i => {
+                spreadsheet.updateCell({ value: i }, address);
+                const nextCell = getNextKey(address.replace(/[^a-z]/gi, ''))
+                address = `${nextCell}${address.replace(/\D/g, "")}`
+            })
+        }
+    }
+
+    const attributesHandler = (attr, key) => {
+        const selectedCell = spreadsheet.selectionModule.startCell;
+        if (selectedCell) {
+            const address = `${colName(selectedCell[1])}${selectedCell[0] + 1}`
+            spreadsheet.updateCell({ value: `${attr} ${key}` }, address);
+        }
+    }
+
+    const atributes = ['ciclo', 'optimo', 'exigido'];
+    const tables = ['elements', 'articles'];
+
     return (
-        <SpreadsheetComponent cellEdit={(a) => oncellEdit(a)} beforeCellSave={(a) => onbeforeCellSave(a)}>
-            <SheetsDirective>
-                <SheetDirective>
-                    <RangesDirective>
-                        <RangeDirective dataSource={data}></RangeDirective>
-                    </RangesDirective>
-                    <ColumnsDirective>
-                        <ColumnDirective width={100}></ColumnDirective>
-                        {/* <ColumnDirective width={110}></ColumnDirective>
-                        <ColumnDirective width={100}></ColumnDirective>
-                        <ColumnDirective width={180}></ColumnDirective>
-                        <ColumnDirective width={130}></ColumnDirective>
-                        <ColumnDirective width={130}></ColumnDirective> */}
-                    </ColumnsDirective>
-                </SheetDirective>
-            </SheetsDirective>
-        </SpreadsheetComponent>
+        <div>
+            <button className="e-btn" onClick={() => btnClick('ciclo')}>Add ciclo</button>
+            <button className="e-btn" onClick={() => btnClick('optimo')}>Add optimo</button>
+            <button className="e-btn" onClick={() => btnClick('exigido')}>Add exigido</button>
+            <button className="e-btn" onClick={() => addTable()}>Add Table</button>
+            <button className="e-btn" onClick={() => save()}>Save as JSON</button>
+
+            <Dropdown
+                title={'Attributes'}
+                position='right'
+            >
+                {atributes.map((i) =>
+                    <Dropdown.Item key={i}
+                    >{i}
+                        <Dropdown.Submenu position="right">
+                            <Dropdown.Item onClick={() => attributesHandler(i, 'label')}>Label</Dropdown.Item>
+                            <Dropdown.Item onClick={() => attributesHandler(i, 'value')}>Value</Dropdown.Item>
+                        </Dropdown.Submenu>
+                    </Dropdown.Item>)}
+            </Dropdown>
+            <Dropdown
+                title={'Tables'}
+                position='right'
+            >
+                {tables.map((i) =>
+                    <Dropdown.Item onClick={() => addTable(i)} key={i}>{i}</Dropdown.Item>)}
+            </Dropdown>
+
+            <SpreadsheetComponent allowSave={true} height='800px'
+                saveUrl='https://ej2services.syncfusion.com/production/web-services/api/spreadsheet/save'
+                ref={(ssObj) => { spreadsheet = ssObj; }}
+                beforeSave={(a) => beforeSave(a)}
+                cellEdit={(a) => oncellEdit(a)}
+                cellSave={(a) => oncellSave(a)}
+                beforeCellSave={(a) => onbeforeCellSave(a)}
+                beforeCellUpdate={(a) => beforeCellUpdate(a)}
+                created={() => onCreated()}
+            >
+                <SheetsDirective>
+                    <SheetDirective>
+                        <RangesDirective>
+                            <RangeDirective dataSource={data}></RangeDirective>
+                        </RangesDirective>
+                        <ColumnsDirective>
+                            <ColumnDirective width={100}></ColumnDirective>
+                        </ColumnsDirective>
+                    </SheetDirective>
+                </SheetsDirective>
+            </SpreadsheetComponent>
+        </div>
+
     );
 }
 
 export default SyncFusionSpreadSheet;
-
-
-// import { TextBox } from '@syncfusion/ej2-inputs';
-// import { RadioButton } from '@syncfusion/ej2-buttons';
-// import { DatePicker } from '@syncfusion/ej2-calendars';
-// import { DropDownList, MultiSelect } from '@syncfusion/ej2-dropdowns';
-// import { Spreadsheet, CellRenderEventArgs, BeforeSelectEventArgs, getRangeIndexes, ChangeEventArgs } from '@syncfusion/ej2-spreadsheet';
-
-// /**
-//  * Cell template
-//  */
-// //Initialize Spreadsheet component
-// let spreadsheet = new Spreadsheet({
-//     showRibbon: false,
-//     showFormulaBar: false,
-//     allowOpen: false,
-//     allowSave: false,
-//     allowEditing: false,
-//     selectionSettings: { mode: 'None' },
-//     scrollSettings: {
-//         isFinite: true
-//     },
-//     sheets: [{
-//         rowCount: 40,
-//         showGridLines: false,
-//         name: 'Registration Form',
-//         rows: [{
-//             height: 55,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Interview Registration Form',
-//                 style: {
-//                     fontSize: '12pt',
-//                     fontWeight: 'bold',
-//                     textAlign: 'center',
-//                     verticalAlign: 'middle',
-//                     textDecoration: 'underline'
-//                 }
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Name:'
-//             }],
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Date of Birth:'
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Gender:'
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Year of Experience:'
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Areas of Interest:'
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Mobile Number:'
-//             }]
-//         }, {
-//             height: 45,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Email:'
-//             }]
-//         }, {
-//             height: 82,
-//             cells: [{
-//                 index: 1,
-//                 value: 'Address:'
-//             }]
-//         }],
-//         columns: [{
-//             index: 1,
-//             width: 190
-//         }, {
-//             width: 350
-//         }],
-//         ranges: [{
-//             template: '<input />',
-//             address: 'C2:C3'
-//         }, {
-//             template: '<div><input type="radio" name="gender" value="male" /><input type="radio" name="gender" value="female"/></div>',
-//             address: 'C4'
-//         }, {
-//             template: '<input />',
-//             address: 'C5:C8'
-//         }, {
-//             template: '<textarea rows="3"/>',
-//             address: 'C9'
-//         }, {
-//             template: '<button class="e-btn e-flat" style="float:right">Add</button>',
-//             address: 'C11'
-//         }]
-//     }],
-//     beforeCellRender: (args) => {
-//         //Initializing input components before cell rendering
-//         if (spreadsheet.activeSheetIndex === 0) {
-//             let target = args.element.firstElementChild;
-//             switch (args.address) {
-//                 case 'B1':
-//                     (args.element).colSpan = 2;
-//                     break;
-//                 case 'C2':
-//                     new TextBox({ placeholder: 'Name' }, target);
-//                     break;
-//                 case 'C3':
-//                     new DatePicker({ placeholder: 'DOB', }, target);
-//                     break;
-//                 case 'C4':
-//                     new RadioButton({ label: 'Male' }, args.element.firstElementChild.firstElementChild);
-//                     new RadioButton({ label: 'Female' }, args.element.firstElementChild.lastElementChild);
-//                     break;
-//                 case 'C5':
-//                     let experience = ['0 - 1 year', '1 - 3 years', '3 - 5 years', '5 - 10 years'];
-//                     new DropDownList(
-//                         { placeholder: 'Experience', dataSource: experience }, target);
-//                     break;
-//                 case 'C6':
-//                     let languages = ['JAVA', 'C#', 'SQL'];
-//                     new MultiSelect(
-//                         {
-//                             showClearButton: false, placeholder: 'Areas of Interest', dataSource: languages, change: (evt) => {
-//                                 if (args.cell) {
-//                                     args.cell.value = evt.value;
-//                                 } else {
-//                                     let range = getRangeIndexes(evt.address);
-//                                     spreadsheet.sheets[spreadsheet.activeSheetIndex].rows[range[0]].cells[range[1]] = { value: evt.value };
-//                                 }
-//                             }
-//                         }, target);
-//                     break;
-//                 case 'C7':
-//                     new TextBox({ placeholder: 'Mobile Number' }, target);
-//                     break;
-//                 case 'C8':
-//                     new TextBox({ placeholder: 'Email' }, target);
-//                     break;
-//                 case 'C9':
-//                     new TextBox(null, target);
-//                     break;
-//                 default:
-//             }
-//         }
-//     },
-//     created: () => {
-//         //Applies format to specified range
-//         spreadsheet.cellFormat({ fontWeight: 'bold' }, 'B2:B9');
-//     },
-//     beforeSelect: (args) => {
-//         //Prevents selection
-//         args.cancel = true;
-//     }
-// });
-
-// spreadsheet.appendTo('#spreadsheet');
-
-// export default spreadsheet;
